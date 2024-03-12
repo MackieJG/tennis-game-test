@@ -1,59 +1,61 @@
 "use strict";
 
 function getScore(m_score1, m_score2) {
-  var score = "";
-  var tempScore = 0;
   if (m_score1 === m_score2) {
-    switch (m_score1) {
-      case 0:
-        score = "Love-All";
-        break;
-      case 1:
-        score = "Fifteen-All";
-        break;
-      case 2:
-        score = "Thirty-All";
-        break;
-      default:
-        score = "Deuce";
-        break;
-    }
+    return getTiedScore(m_score1);
   } else if (m_score1 >= 4 || m_score2 >= 4) {
-    var minusResult = m_score1 - m_score2;
-    if (minusResult === 1) {
-      score = "Advantage player1";
-    } else if (minusResult === -1) {
-      score = "Advantage player2";
-    } else if (minusResult >= 2) {
-      score = "Win for player1";
-    } else {
-      score = "Win for player2";
-    }
+    var scoreDifference = m_score1 - m_score2;
+    console.log(scoreDifference);
+    return getAdvantageOrWin(scoreDifference);
   } else {
+    var score = "";
     for (var i = 1; i < 3; i++) {
-      if (i === 1) {
-        tempScore = m_score1;
-      } else {
-        score += "-";
-        tempScore = m_score2;
-      }
-      switch (tempScore) {
-        case 0:
-          score += "Love";
-          break;
-        case 1:
-          score += "Fifteen";
-          break;
-        case 2:
-          score += "Thirty";
-          break;
-        case 3:
-          score += "Forty";
-          break;
-      }
+      var tempScore = i === 1 ? m_score1 : m_score2;
+      if (i === 2) score += "-";
+      score += getInGameScore(tempScore);
     }
+    return score;
   }
-  return score;
+}
+
+function getTiedScore(score) {
+  switch (score) {
+    case 0:
+      return "Love-All";
+    case 1:
+      return "Fifteen-All";
+    case 2:
+      return "Thirty-All";
+    default:
+      return "Deuce";
+  }
+}
+
+function getAdvantageOrWin(scoreDifference) {
+  if (scoreDifference === 1) {
+    return "Advantage player1";
+  } else if (scoreDifference === -1) {
+    return "Advantage player2";
+  } else if (scoreDifference > 1) {
+    return "Win for player1";
+  } else if (scoreDifference < -1) {
+    return "Win for player2";
+  } else {
+    return "Scores are level";
+  }
+}
+
+function getInGameScore(score) {
+  switch (score) {
+    case 0:
+      return "Love";
+    case 1:
+      return "Fifteen";
+    case 2:
+      return "Thirty";
+    case 3:
+      return "Forty";
+  }
 }
 
 module.exports = getScore;
